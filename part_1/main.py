@@ -8,7 +8,7 @@ def calculate_fitness(population):
         for idx, element in enumerate(fenotype):
             for idx2, el in enumerate(fenotype):
                 penalty += 1 if (idx != idx2 and abs(idx - idx2) == abs(element - el)) else 0
-        result.append((fenotype, 1/penalty))
+        result.append((fenotype_to_genotype(fenotype), 1/penalty))
     return result
 
 def genotype_to_fenotype(genotype):
@@ -64,7 +64,7 @@ def parent_selection(population):
     parents = select_random_parents(population)
     parents.sort(key=lambda tup: tup[1], reverse=True)
     selected_parents = parents[0:2]
-    return list(map(fenotype_to_genotype, map(lambda tup: tup[0], selected_parents))) #2 parents
+    return list(map(lambda tup: tup[0], selected_parents)) #2 parents
 
 def select_random_parents(population):
     random_parents = []
