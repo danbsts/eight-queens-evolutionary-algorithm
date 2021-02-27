@@ -1,4 +1,5 @@
 # Representação
+import random
 
 def calcFitness(population):
    for element in population:
@@ -27,11 +28,15 @@ def cutAndCrossfill(parent1, parent2):
    return child
 
 def mutate(child):
-
-   return mutatedChild
+   position1 = random.randint(0,7)
+   position2 = random.randint(0,7)
+   while position1 == position2:
+        position1 = random.randint(0,7)
+        position2 = random.randint(0,7)
+   child[position1], child[position2] = child[position2], child[position1]
+   return child
 
 def parentSelection(parents):
-
    return selectedParents #2 parents
 
 def survivalSelection(population):
