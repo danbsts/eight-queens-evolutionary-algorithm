@@ -1,3 +1,4 @@
+import random
 # Representação
 
 def calcFitness(population):
@@ -10,9 +11,30 @@ def genotypeIntoFenotype(genotype):
 
     return fenotype
 
-def cutAndCrossfill(parent1, parent2):
 
+
+def Crossfill(child, parent,cutPoint):
+    index = cutPoint
+    while(len(child) < 8):
+        if not(parent[index%8] in child):
+            child += parent[index%8]
+        index+=1
     return child
+
+def cutAndCrossfill(parent1, parent2):
+    fenoParent1 = genotypeIntoFenotype(parent1)
+    fenoParent2 = genotypeIntoFenotype(parent2)
+    cutPoint = random.randint(0,6)
+
+    child1 = fenoParent1[0:cutPoint]
+    child2 = fenoParent2[0:cutPoint]
+    child1 = crossfill(child1,parent2,cutPoint)
+    child2 = crossfill(child2,parent1,cutPoint)
+    child1 = fenotypeIntoGenotype(child1)
+    child2 = fenotypeIntoGenotype(child2)
+
+
+    return [child1,child2]
 
 def mutate(child):
 
