@@ -17,9 +17,6 @@ def genotypeIntoFenotype(genotype):
 
     return fenotype
 
-<<<<<<< HEAD
-
-
 def Crossfill(child, parent,cutPoint):
     index = cutPoint
     while(len(child) < 8):
@@ -27,18 +24,13 @@ def Crossfill(child, parent,cutPoint):
             child += parent[index%8]
         index+=1
     return child
-=======
+
 def fenotypeIntoGenotype(fenotype):
     def addZeros(element):
       missing = len(element)
       return (3-missing)*'0' + element
     
     return ''.join(map(addZeros, map(lambda x: "{0:b}".format(x), fenotype)))
-
-def cutAndCrossfill(parent1, parent2):
-
-   return child
->>>>>>> fe433e60adfe5aed5dc5afa13292dea8417d811c
 
 def cutAndCrossfill(parent1, parent2):
     fenoParent1 = genotypeIntoFenotype(parent1)
