@@ -2,31 +2,13 @@ import random
 
 def calculate_fitness(population):
     result = []
-    fenotype_list = list(map(genotype_to_fenotype, population))
-    for fenotype in fenotype_list:
+    for fenotype in population:
         penalty = 1
         for idx, element in enumerate(fenotype):
             for idx2, el in enumerate(fenotype):
                 penalty += 1 if (idx != idx2 and abs(idx - idx2) == abs(element - el)) else 0
         result.append((fenotype, 1/penalty))
     return result
-
-def genotype_to_fenotype(genotype):
-    actual = 0
-    fenotype = []
-    for i in range(3, len(genotype)+3, 3):
-        fenotype.append(int(genotype[(actual*3):i],2))
-        actual += 1
-
-    return fenotype
-
-
-def fenotype_to_genotype(fenotype):
-    def add_zeros(element):
-        missing = len(element)
-        return (3-missing)*'0' + element
-    
-    return ''.join(map(add_zeros, map(lambda x: "{0:b}".format(x), fenotype)))
 
 def crossfill(child, parent,cut_point):
     index = cut_point
@@ -37,34 +19,31 @@ def crossfill(child, parent,cut_point):
     return child
 
 def cut_and_crossfill(parents):
-    fenotype_parent1 = genotype_to_fenotype(parents[0])
-    fenotype_parent2 = genotype_to_fenotype(parents[1])
+    parent1 = parents[0]
+    parent2 = parents[1]
     cut_point = random.randint(0,6)
 
-    child1 = fenotype_parent1[0:cut_point]
-    child2 = fenotype_parent2[0:cut_point]
-    child1 = crossfill(child1,fenotype_parent2,cut_point)
-    child2 = crossfill(child2,fenotype_parent1,cut_point)
-    child1 = fenotype_to_genotype(child1)
-    child2 = fenotype_to_genotype(child2)
+    child1 = parent1[0:cut_point]
+    child2 = parent2[0:cut_point]
+    child1 = crossfill(child1,parent2,cut_point)
+    child2 = crossfill(child2,parent1,cut_point)
 
     return [child1,child2]
 
 def mutate(child):
-   fenotype_child = genotype_to_fenotype(child)
    position1 = random.randint(0,7)
    position2 = random.randint(0,7)
    while position1 == position2:
         position1 = random.randint(0,7)
         position2 = random.randint(0,7)
-   fenotype_child[position1], fenotype_child[position2] = fenotype_child[position2], fenotype_child[position1]
-   return fenotype_to_genotype(fenotype_child)
+   child[position1], child[position2] = child[position2], child[position1]
+   return child
 
 def parent_selection(population):
     parents = select_random_parents(population)
     parents.sort(key=lambda tup: tup[1], reverse=True)
     selected_parents = parents[0:2]
-    return list(map(fenotype_to_genotype, map(lambda tup: tup[0], selected_parents))) #2 parents
+    return list(map(lambda tup: tup[0], selected_parents)) #2 parents
 
 def select_random_parents(population):
     random_parents = []
@@ -86,7 +65,7 @@ def init_population(population_size):
 def generate_child():
     child = [0,1,2,3,4,5,6,7]
     random.shuffle(child)
-    return fenotype_to_genotype(child)
+    return child
 
 def eval(population_fitness):
     for individual in population_fitness:
