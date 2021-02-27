@@ -51,8 +51,8 @@ def cutAndCrossfill(parent1, parent2):
     child2 = crossfill(child2,fenoParent1,cutPoint)
     print(child1)
     print(child2)
-    #child1 = fenotypeIntoGenotype(child1)
-    #child2 = fenotypeIntoGenotype(child2)
+    child1 = fenotypeIntoGenotype(child1)
+    child2 = fenotypeIntoGenotype(child2)
 
     return [child1,child2]
 
