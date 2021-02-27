@@ -2,9 +2,15 @@
 import random
 
 def calcFitness(population):
-   for element in population:
-       fenotype = genotypeIntoFenotype(population)
-    #Calculo do fitness, retorna [(genotipo, fitness),...]
+    result = []
+    fenotype_list = list(map(genotypeIntoFenotype, population))
+    for fenotype in fenotype_list:
+        penalty = 0
+        for idx, element in enumerate(fenotype):
+            for idx2, el in enumerate(fenotype):
+                penalty += 1 if (idx != idx2 and abs(idx - idx2) == abs(element - el)) else 0
+        result.append((fenotype, penalty))
+    return result
 
 def genotypeIntoFenotype(genotype):
     # 000000000000000000000000 -> [0,0,0,0,0,0.0,0]
@@ -26,8 +32,8 @@ def Crossfill(child, parent,cutPoint):
 
 def fenotypeIntoGenotype(fenotype):
     def addZeros(element):
-      missing = len(element)
-      return (3-missing)*'0' + element
+        missing = len(element)
+        return (3-missing)*'0' + element
     
     return ''.join(map(addZeros, map(lambda x: "{0:b}".format(x), fenotype)))
 
