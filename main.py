@@ -102,8 +102,11 @@ def generateChild():
     return child
 
 def eval(populationFitness):
-
-   return solution
+    for individual in populationFitness:
+        if individual[1] == 1:
+            return individual[0]
+    
+    return None
 
 def main():
     # parent1 = [0,2,4,1,5,3,6,7]
