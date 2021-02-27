@@ -15,6 +15,13 @@ def genotypeIntoFenotype(genotype):
 
     return fenotype
 
+def fenotypeIntoGenotype(fenotype):
+    def addZeros(element):
+      missing = len(element)
+      return (3-missing)*'0' + element
+    
+    return ''.join(map(addZeros, map(lambda x: "{0:b}".format(x), fenotype)))
+
 def cutAndCrossfill(parent1, parent2):
 
    return child
