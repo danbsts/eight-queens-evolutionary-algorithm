@@ -69,8 +69,10 @@ def parentSelection(parents):
    return selectedParents #2 parents
 
 def survivalSelection(population):
-    #Return survivors
-   return newPopulation
+    def sortFunction(element):
+        return element[1]
+    population.sort(key=sortFunction)
+    return population[:-2]
 
 def initPopulation(populationSize):
     #Creates a random population
