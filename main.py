@@ -1,4 +1,3 @@
-import random
 # Representação
 import random
 
@@ -44,7 +43,6 @@ def cutAndCrossfill(parent1, parent2):
     child1 = fenotypeIntoGenotype(child1)
     child2 = fenotypeIntoGenotype(child2)
 
-
     return [child1,child2]
 
 def mutate(child):
@@ -65,22 +63,39 @@ def survivalSelection(population):
 
 def initPopulation(populationSize):
     #Creates a random population
-   return population
+    population = []
+    while populationSize > 0:
+        population.append(generateChild())
+        populationSize -= 1
+    return population
+
+def generateChild():
+    child = ""
+    count = 0
+    while count < 24:
+        randomNumber = random.random()
+        if randomNumber <= 0.5:
+            child = child + "0"
+        else:
+            child = child + "1"
+        count += 1
+    return child
 
 def eval(populationFitness):
 
    return solution
 
 def main():
-   population = initPopulation(100)
-   populationFitness = calcFitness(population)
-   solution = eval(populationFitness)
-   count = 0
-   while(solution != None and count < 10000){
-       
-       count += 1
-   }
+    population = initPopulation(10)
+    print(population)
+    populationFitness = calcFitness(population)
+    solution = eval(populationFitness)
+    count = 0
+    while(solution != None and count < 10000){
+        
+        count += 1
+    }
 
-   print(solution)
+    print(solution)
 
 main()
