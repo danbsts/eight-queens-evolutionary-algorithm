@@ -5,11 +5,11 @@ def calcFitness(population):
     result = []
     fenotype_list = list(map(genotypeIntoFenotype, population))
     for fenotype in fenotype_list:
-        penalty = 0
+        penalty = 1
         for idx, element in enumerate(fenotype):
             for idx2, el in enumerate(fenotype):
                 penalty += 1 if (idx != idx2 and abs(idx - idx2) == abs(element - el)) else 0
-        result.append((fenotype, penalty))
+        result.append((fenotype, 1/penalty))
     return result
 
 def genotypeIntoFenotype(genotype):
@@ -65,12 +65,12 @@ def mutate(child):
    child[position1], child[position2] = child[position2], child[position1]
    return child
 
-# def parentSelection(parents):
-#    return selectedParents #2 parents
+def parentSelection(parents):
+   return selectedParents #2 parents
 
-# def survivalSelection(population):
-#     #Return survivors
-#    return newPopulation
+def survivalSelection(population):
+    #Return survivors
+   return newPopulation
 
 def initPopulation(populationSize):
     #Creates a random population
@@ -91,13 +91,10 @@ def generateChild():
             child = child + "1"
         count += 1
     return child
-# def initPopulation(populationSize):
-#     #Creates a random population
-#    return population
 
-# def eval(populationFitness):
+def eval(populationFitness):
 
-#    return solution
+   return solution
 
 def main():
     # parent1 = [0,2,4,1,5,3,6,7]
