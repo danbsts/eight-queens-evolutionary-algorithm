@@ -36,47 +36,44 @@ def crossfill(child, parent,cut_point):
         index= (index + 1)%8
     return child
 
-def cut_and_crossfill(parent1, parent2):
-    fenotype_parent1 = genotype_to_fenotype(parent1)
-    fenotype_parent2 = genotype_to_fenotype(parent2)
-    print(fenotype_parent1)
-    print(fenotype_parent2)
+def cut_and_crossfill(parents):
+    fenotype_parent1 = genotype_to_fenotype(parents[0])
+    fenotype_parent2 = genotype_to_fenotype(parents[1])
     cut_point = random.randint(0,6)
 
     child1 = fenotype_parent1[0:cut_point]
     child2 = fenotype_parent2[0:cut_point]
     child1 = crossfill(child1,fenotype_parent2,cut_point)
     child2 = crossfill(child2,fenotype_parent1,cut_point)
-    print(child1)
-    print(child2)
     child1 = fenotype_to_genotype(child1)
     child2 = fenotype_to_genotype(child2)
 
     return [child1,child2]
 
 def mutate(child):
+   fenotype_child = genotype_to_fenotype(child)
    position1 = random.randint(0,7)
    position2 = random.randint(0,7)
    while position1 == position2:
         position1 = random.randint(0,7)
         position2 = random.randint(0,7)
-   child[position1], child[position2] = child[position2], child[position1]
-   return child
+   fenotype_child[position1], fenotype_child[position2] = fenotype_child[position2], fenotype_child[position1]
+   return fenotype_to_genotype(fenotype_child)
 
 def parent_selection(population):
     parents = select_random_parents(population)
     parents.sort(key=lambda tup: tup[1], reverse=True)
     selected_parents = parents[0:2]
-    return selected_parents #2 parents
+    return list(map(fenotype_to_genotype, map(lambda tup: tup[0], selected_parents))) #2 parents
 
 def select_random_parents(population):
     random_parents = []
     for i in range(5):
-        random_parents.append(population[random.randint(0,100)])
+        random_parents.append(population[random.randint(0,99)])
     return random_parents
     
 def survival_selection(population):
-    population.sort(key=lambda tup: -tup[1])
+    population.sort(key=lambda tup: tup[1], reverse=True)
     return population[:-2]
 
 def init_population(population_size):
@@ -103,8 +100,17 @@ def main():
     population_fitness = calculate_fitness(population)
     solution = eval(population_fitness)
     count = 0
-    while solution == None and count < 2:
-      count += 1
-    print(solution)
+    while solution == None and count < 10000:
+        parents = parent_selection(population_fitness)
+        if random.random() <= 0.9:
+            children = cut_and_crossfill(parents)
+            children = list(map(lambda child: mutate(child) if random.random() <= 0.4 else child, children)) 
+            children = calculate_fitness(children)
+            population_fitness.append(children[0])
+            population_fitness.append(children[1])
+            population_fitness = survival_selection(population_fitness)
+            solution = eval(population_fitness)
+        count += 1
+    print(f'Generation {count}: {solution}')
 
 main()
