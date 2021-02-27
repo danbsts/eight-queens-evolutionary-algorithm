@@ -22,13 +22,6 @@ def genotypeIntoFenotype(genotype):
 
     return fenotype
 
-def Crossfill(child, parent,cutPoint):
-    index = cutPoint
-    while(len(child) < 8):
-        if not(parent[index%8] in child):
-            child += parent[index%8]
-        index+=1
-    return child
 
 def fenotypeIntoGenotype(fenotype):
     def addZeros(element):
@@ -37,17 +30,29 @@ def fenotypeIntoGenotype(fenotype):
     
     return ''.join(map(addZeros, map(lambda x: "{0:b}".format(x), fenotype)))
 
+def crossfill(child, parent,cutPoint):
+    index = cutPoint
+    while(len(child) < 8):
+        if not(parent[index] in child):
+            child.append(parent[index])
+        index= (index + 1)%8
+    return child
+
 def cutAndCrossfill(parent1, parent2):
     fenoParent1 = genotypeIntoFenotype(parent1)
     fenoParent2 = genotypeIntoFenotype(parent2)
-    cutPoint = random.randint(0,6)
+    print(fenoParent1)
+    print(fenoParent2)
+    cutPoint = 3#random.randint(0,6)
 
     child1 = fenoParent1[0:cutPoint]
     child2 = fenoParent2[0:cutPoint]
-    child1 = crossfill(child1,parent2,cutPoint)
-    child2 = crossfill(child2,parent1,cutPoint)
-    child1 = fenotypeIntoGenotype(child1)
-    child2 = fenotypeIntoGenotype(child2)
+    child1 = crossfill(child1,fenoParent2,cutPoint)
+    child2 = crossfill(child2,fenoParent1,cutPoint)
+    print(child1)
+    print(child2)
+    #child1 = fenotypeIntoGenotype(child1)
+    #child2 = fenotypeIntoGenotype(child2)
 
     return [child1,child2]
 
@@ -60,12 +65,12 @@ def mutate(child):
    child[position1], child[position2] = child[position2], child[position1]
    return child
 
-def parentSelection(parents):
-   return selectedParents #2 parents
+# def parentSelection(parents):
+#    return selectedParents #2 parents
 
-def survivalSelection(population):
-    #Return survivors
-   return newPopulation
+# def survivalSelection(population):
+#     #Return survivors
+#    return newPopulation
 
 def initPopulation(populationSize):
     #Creates a random population
@@ -86,22 +91,30 @@ def generateChild():
             child = child + "1"
         count += 1
     return child
+# def initPopulation(populationSize):
+#     #Creates a random population
+#    return population
 
-def eval(populationFitness):
+# def eval(populationFitness):
 
-   return solution
+#    return solution
 
 def main():
-    population = initPopulation(10)
-    print(population)
-    populationFitness = calcFitness(population)
-    solution = eval(populationFitness)
-    count = 0
-    while(solution != None and count < 10000){
+    parent1 = [0,2,4,1,5,3,6,7]
+    parent2 = [7,6,5,4,3,2,1,0]
+    parent1 = fenotypeIntoGenotype(parent1)
+    parent2 = fenotypeIntoGenotype(parent2)
+    cutAndCrossfill(parent1,parent2)
+    # population = initPopulation(10)
+    # print(population)
+    # populationFitness = calcFitness(population)
+    # solution = eval(populationFitness)
+    # count = 0
+    # while(solution != None and count < 10000){
         
-        count += 1
-    }
+    #     count += 1
+    # }
 
-    print(solution)
+    # print(solution)
 
 main()
