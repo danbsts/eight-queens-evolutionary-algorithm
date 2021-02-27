@@ -78,9 +78,7 @@ def select_random_parents(population):
     return randomParents
     
 def survivalSelection(population):
-    def sortFunction(element):
-        return element[1]
-    population.sort(key=sortFunction)
+    population.sort(key=lambda tup: -tup[1])
     return population[:-2]
 
 def initPopulation(populationSize):
