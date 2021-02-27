@@ -43,7 +43,7 @@ def cutAndCrossfill(parent1, parent2):
     fenoParent2 = genotypeIntoFenotype(parent2)
     print(fenoParent1)
     print(fenoParent2)
-    cutPoint = 3#random.randint(0,6)
+    cutPoint = random.randint(0,6)
 
     child1 = fenoParent1[0:cutPoint]
     child2 = fenoParent2[0:cutPoint]
@@ -100,21 +100,21 @@ def generateChild():
 #    return solution
 
 def main():
-    parent1 = [0,2,4,1,5,3,6,7]
-    parent2 = [7,6,5,4,3,2,1,0]
-    parent1 = fenotypeIntoGenotype(parent1)
-    parent2 = fenotypeIntoGenotype(parent2)
-    cutAndCrossfill(parent1,parent2)
-    # population = initPopulation(10)
-    # print(population)
-    # populationFitness = calcFitness(population)
-    # solution = eval(populationFitness)
-    # count = 0
-    # while(solution != None and count < 10000){
+    # parent1 = [0,2,4,1,5,3,6,7]
+    # parent2 = [7,6,5,4,3,2,1,0]
+    # parent1 = fenotypeIntoGenotype(parent1)
+    # parent2 = fenotypeIntoGenotype(parent2)
+    # cutAndCrossfill(parent1,parent2)
+    population = initPopulation(10)
+    print(population)
+    populationFitness = calcFitness(population)
+    solution = eval(populationFitness)
+    count = 0
+    while(solution != None and count < 10000){
         
-    #     count += 1
-    # }
+        count += 1
+    }
 
-    # print(solution)
+    print(solution)
 
 main()
