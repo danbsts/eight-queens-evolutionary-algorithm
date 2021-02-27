@@ -65,9 +65,18 @@ def mutate(child):
    child[position1], child[position2] = child[position2], child[position1]
    return child
 
-def parentSelection(parents):
-   return selectedParents #2 parents
+def parent_selection(population):
+    parents = select_random_parents(population)
+    parents.sort(key=lambda tup: tup[1], reverse=True)
+    selectedParents = parents[0:2]
+    return selectedParents #2 parents
 
+def select_random_parents(population):
+    randomParents = []
+    for i in range(5):
+        randomParents.append(population[random.randint(0,100)])
+    return randomParents
+    
 def survivalSelection(population):
     def sortFunction(element):
         return element[1]
@@ -104,15 +113,14 @@ def main():
     # parent1 = fenotypeIntoGenotype(parent1)
     # parent2 = fenotypeIntoGenotype(parent2)
     # cutAndCrossfill(parent1,parent2)
-    population = initPopulation(10)
+    population = initPopulation(100)
     print(population)
     populationFitness = calcFitness(population)
     solution = eval(populationFitness)
     count = 0
-    while(solution != None and count < 10000){
-        
-        count += 1
-    }
+    while solution != None and count < 10000:
+      count += 1
+    
 
     print(solution)
 
