@@ -13,24 +13,32 @@ def calculate_fitness(population):
         result.append((fenotype, 1/penalty))
     return result
 
-def crossfill(child, parent,cut_point):
-    index = cut_point
-    while(len(child) < 8):
-        if not(parent[index] in child):
-            child.append(parent[index])
+def order(child, parent1,parent2,cut_point):
+    index = (cut_point[1]+1)%8
+    index2 = index
+    child[cut_point[0]:index] = parent1[cut_point[0]:index]
+    while(child.count(-1) > 0):
+        if not(parent2[index] in child):
+            child[index2] = parent2[index]
+            index2 = (index2 + 1)%8
         index= (index + 1)%8
     return child
 
-def cut_and_crossfill(parents):
+def first_order_crossover(parents):
     if random.random() <= 0.9:
         parent1 = parents[0]
         parent2 = parents[1]
-        cut_point = random.randint(0,6)
-
-        child1 = parent1[0:cut_point]
-        child2 = parent2[0:cut_point]
-        child1 = crossfill(child1,parent2,cut_point)
-        child2 = crossfill(child2,parent1,cut_point)
+        cut_point = []
+        cut_point.append(random.randint(0,7))
+        cut_point.append(random.randint(0,7))
+        while(abs(cut_point[1]-cut_point[0])  == 7):
+            cut_point[1] = random.randint(0,7)
+        cut_point.sort()
+        child1 =[-1 for i in range(8)]
+        child2 =[-1 for i in range(8)]
+        child1 = order(child1,parent1,parent2 ,cut_point)
+        child2 = order(child2,parent2, parent1, cut_point)
+        
     else:
         child1 = parents[0]
         child2 = parents[1]
@@ -110,13 +118,13 @@ def eval(population_fitness):
     return None
 
 def main():
-    population = init_population(100)
+    population = init_population(10)
     population_fitness = calculate_fitness(population)
     solution = eval(population_fitness)
     count = 0
     while solution == None and count < 10000:
         parents = parent_selection(population_fitness)
-        children = cut_and_crossfill(parents)
+        children = first_order_crossover(parents)
         children = list(map(lambda child: mutate(child) if random.random() <= 0.4 else child, children)) 
         children = calculate_fitness(children)
         population_fitness.append(children[0])
