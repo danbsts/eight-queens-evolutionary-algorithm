@@ -19,14 +19,18 @@ def crossfill(child, parent,cut_point):
     return child
 
 def cut_and_crossfill(parents):
-    parent1 = parents[0]
-    parent2 = parents[1]
-    cut_point = random.randint(0,6)
+    if random.random() <= 0.9:
+        parent1 = parents[0]
+        parent2 = parents[1]
+        cut_point = random.randint(0,6)
 
-    child1 = parent1[0:cut_point]
-    child2 = parent2[0:cut_point]
-    child1 = crossfill(child1,parent2,cut_point)
-    child2 = crossfill(child2,parent1,cut_point)
+        child1 = parent1[0:cut_point]
+        child2 = parent2[0:cut_point]
+        child1 = crossfill(child1,parent2,cut_point)
+        child2 = crossfill(child2,parent1,cut_point)
+    else:
+        child1 = parents[0]
+        child2 = parents[1]
 
     return [child1,child2]
 
@@ -81,14 +85,13 @@ def main():
     count = 0
     while solution == None and count < 10000:
         parents = parent_selection(population_fitness)
-        if random.random() <= 0.9:
-            children = cut_and_crossfill(parents)
-            children = list(map(lambda child: mutate(child) if random.random() <= 0.4 else child, children)) 
-            children = calculate_fitness(children)
-            population_fitness.append(children[0])
-            population_fitness.append(children[1])
-            population_fitness = survival_selection(population_fitness)
-            solution = eval(population_fitness)
+        children = cut_and_crossfill(parents)
+        children = list(map(lambda child: mutate(child) if random.random() <= 0.4 else child, children)) 
+        children = calculate_fitness(children)
+        population_fitness.append(children[0])
+        population_fitness.append(children[1])
+        population_fitness = survival_selection(population_fitness)
+        solution = eval(population_fitness)
         count += 1
     print(f'Generation {count}: {solution}')
 
