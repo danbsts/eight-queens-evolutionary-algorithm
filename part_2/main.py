@@ -2,6 +2,7 @@ import random
 import numpy as np
 from functools import reduce
 
+from functools import reduce
 def calculate_fitness(population):
     result = []
     for fenotype in population:
