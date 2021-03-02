@@ -73,7 +73,7 @@ def parent_selection(population):
 def select_random_parents(population):
     random_parents = []
     for i in range(5):
-        random_parents.append(population[random.randint(0,99)])
+        random_parents.append(population[random.randint(0,9)])
     return random_parents
     
 def survival_selection(population):
@@ -100,7 +100,7 @@ def eval(population_fitness):
     return None
 
 def main():
-    population = init_population(100)
+    population = init_population(10)
     population_fitness = calculate_fitness(population)
     solution = eval(population_fitness)
     count = 0
