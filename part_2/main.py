@@ -1,5 +1,6 @@
 import random
 import numpy as np
+from functools import reduce
 
 def calculate_fitness(population):
     result = []
@@ -44,17 +45,35 @@ def mutate(child):
    child[position1], child[position2] = child[position2], child[position1]
    return child
 
+def spin_wheel(roleta, sorted_probability):
+    for idx, probability in enumerate(roleta):
+        if idx > 0:
+            if(sorted_probability <= probability and sorted_probability > roleta[idx-1]):
+                break
+        else:
+            if(sorted_probability <= probability):
+                break
+    return idx
 def parent_selection(population):
-    parents = select_random_parents(population)
-    parents.sort(key=lambda tup: tup[1], reverse=True)
-    selected_parents = parents[0:2]
-    return list(map(lambda tup: tup[0], selected_parents)) #2 parents
+    #parents = select_random_parents(population)
+    total_fitness = reduce(lambda x,y: x + y[1], population,0)
+    parents = population
+    roleta = []
+    current_probability=0
+    selected_parents = []
+    parents.sort(key=lambda tup: tup[1], reverse=False)
+    for parent in parents:
+        roleta.append(current_probability + (parent[1]/total_fitness)) 
+        current_probability = roleta[-1]
+    selected_parents.append(parents[spin_wheel(roleta, random.random())])
+    selected_parents.append(parents[spin_wheel(roleta, random.random())])
+    count = 0
+    while(selected_parents[1] == selected_parents[0] and count < 100):
+        selected_parents[1] = parents[spin_wheel(roleta, random.random())]
+        count +=1         
 
-def select_random_parents(population):
-    random_parents = []
-    for i in range(5):
-        random_parents.append(population[random.randint(0,99)])
-    return random_parents
+    return list(map(lambda tup: tup[0], selected_parents)) #2 parents
+    
     
 def survival_selection(population, parents):
     checksum = 0
