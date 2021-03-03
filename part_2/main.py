@@ -10,18 +10,41 @@ def calculate_fitness(population):
         result.append((fenotype, 1/penalty))
     return result
 
-def order(child, parent1,parent2,cut_point):
-    index = (cut_point[1]+1)%8
-    index2 = index
-    child[cut_point[0]:index] = parent1[cut_point[0]:index]
+def get_index(child,parent,index):
+    flag = False
+    aux1 = index
+    aux2 = 0
+    while(not flag):
+        aux2 = parent.index(child[aux1])
+        if(child[aux2] == -1):
+            flag = True
+        else:
+            aux1 = aux2
+    return aux2
+
+
+        
+def crossover(child, parent1,parent2,cut_point):
+    index = (cut_point[0])
+    index2 = (cut_point[1]+1)%8
+    child[cut_point[0]:index2] = parent1[cut_point[0]:index2]
+    while(index < index2):
+        if(parent2[index] not in child):
+            i = get_index(child,parent2, index)
+            child[i] = parent2[index]
+        index+=1
+    
     while(child.count(-1) > 0):
-        if not(parent2[index] in child):
-            child[index2] = parent2[index]
-            index2 = (index2 + 1)%8
-        index= (index + 1)%8
+        if(child[index] == -1):
+            while(parent2[index2] in child):
+                index2 = (index2+1)%8
+            child[index] = parent2[index2]
+        index = (index+1)%8
+
+        
     return child
 
-def first_order_crossover(parents):
+def partially_mapped_crossover(parents):
     if random.random() <= 0.9:
         parent1 = parents[0]
         parent2 = parents[1]
@@ -30,11 +53,13 @@ def first_order_crossover(parents):
         cut_point.append(random.randint(0,7))
         while(abs(cut_point[1]-cut_point[0])  == 7):
             cut_point[1] = random.randint(0,7)
+        
+        tamanho = abs(abs(cut_point[1]-cut_point[0]))
         cut_point.sort()
         child1 =[-1 for i in range(8)]
         child2 =[-1 for i in range(8)]
-        child1 = order(child1,parent1,parent2 ,cut_point)
-        child2 = order(child2,parent2, parent1, cut_point)
+        child1 = crossover(child1,parent1,parent2 ,cut_point)
+        child2 = crossover(child2,parent2, parent1, cut_point)
         
     else:
         child1 = parents[0]
@@ -111,7 +136,7 @@ def main():
     count = 0
     while solution == None and count < 10000:
         parents = parent_selection(population_fitness)
-        children = first_order_crossover(parents)
+        children = partially_mapped_crossover(parents)
         children = list(map(lambda child: mutate(child) if random.random() <= 0.4 else child, children)) 
         children = calculate_fitness(children)
         population_fitness.append(children[0])
