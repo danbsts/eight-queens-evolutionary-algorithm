@@ -65,12 +65,13 @@ def parent_selection(population):
     for parent in parents:
         roleta.append(current_probability + (parent[1]/total_fitness)) 
         current_probability = roleta[-1]
-    selected_parents.append(parents[spin_wheel(roleta, random.random())])
-    selected_parents.append(parents[spin_wheel(roleta, random.random())])
-    count = 0
-    while(selected_parents[1] == selected_parents[0] and count < 100):
-        selected_parents[1] = parents[spin_wheel(roleta, random.random())]
-        count +=1         
+    first_parent_id = spin_wheel(roleta, random.random())
+    selected_parents.append(parents[first_parent_id])
+    second_parent_id =spin_wheel(roleta, random.random())
+    selected_parents.append(parents[second_parent_id])
+    while(first_parent_id == second_parent_id):
+        second_parent_id =spin_wheel(roleta, random.random())
+        selected_parents[1] = parents[second_parent_id]    
 
     return list(map(lambda tup: tup[0], selected_parents)) #2 parents
     
