@@ -68,13 +68,20 @@ def partially_mapped_crossover(parents):
     return [child1,child2]
 
 def mutate(child):
-   position1 = random.randint(0,7)
-   position2 = random.randint(0,7)
-   while position1 == position2:
+    position1 = random.randint(0,7)
+    position2 = random.randint(0,7)
+    while position1 == position2 or abs(position1-position2) == 1:
         position1 = random.randint(0,7)
         position2 = random.randint(0,7)
-   child[position1], child[position2] = child[position2], child[position1]
-   return child
+    if(position1 < position2):
+        aux = child[position2]
+        child.remove(child[position2])
+        child.insert(position1+1, aux)
+    else:
+        aux = child[position1]
+        child.remove(child[position1])
+        child.insert(position2-1, aux)
+    return child
 
 def spin_wheel(roleta, sorted_probability):
     for idx, probability in enumerate(roleta):
