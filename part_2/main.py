@@ -58,6 +58,7 @@ def select_random_parents(population):
     
 def survival_selection(population, parents):
     checksum = 0
+    population.sort(key=lambda tup: tup[1], reverse=True)
     for parent in parents:
         for i in range(len(population)):
             if parent == population[i][0]:
