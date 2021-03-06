@@ -1,4 +1,5 @@
 import random
+import numpy as np
 
 def calculate_fitness(population):
     result = []
@@ -101,6 +102,24 @@ def main():
         population_fitness = survival_selection(population_fitness, parents)
         solution = eval(population_fitness)
         count += 1
-    print(f'Generation {count}: {solution}')
+    if count == 10000:
+        return -1
+    else:
+        total_converged = len(list(filter(lambda x : x[1] == 1, population_fitness)))
+        return (count, total_converged, calculate_mean(population_fitness,1), calculate_std(population_fitness,1))
+
+def calculate_mean(generations, pos):
+    return np.mean(list(map(lambda x : x[pos], generations)))
+
+def calculate_std(generations, pos):
+    return np.std(list(map(lambda x : x[pos], generations)))
+
+generation_infos = []
+for i in range(30):
+    generation_infos.append(main())
+print("Quantidade de convergências: ", 30 - len(list(filter(lambda x : x[0] == -1, generation_infos))))
+print('Media de iterações que o algoritmo convergiu: ', calculate_mean(generation_infos, 0), ' Desvio Padrão das iterações que o algoritmo convergiu :', calculate_std(generation_infos, 0))
+print('Média de Indivíduos que convergiram por execução : ', calculate_mean(generation_infos, 1))
+print('Media Fitness: ', calculate_mean(generation_infos, 2), ' Desvio Padrão Fitness:', calculate_std(generation_infos, 2))
 
 main()
