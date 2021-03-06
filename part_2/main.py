@@ -86,17 +86,8 @@ def parent_selection(population):
     
     
 def survival_selection(population, parents):
-    checksum = 0
     population.sort(key=lambda tup: tup[1], reverse=True)
-    for parent in parents:
-        for i in range(len(population)):
-            if parent == population[i][0]:
-                population.pop(i)
-                checksum += 1
-                break
-    if checksum != 2:
-        return population[:-1]
-    return population
+    return population[:-2]
 
 def init_population(population_size):
     population = []
