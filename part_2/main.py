@@ -52,12 +52,20 @@ def parent_selection(population):
 def select_random_parents(population):
     random_parents = []
     for i in range(5):
-        random_parents.append(population[random.randint(0,99)])
+        random_parents.append(population[random.randint(0,9)])
     return random_parents
     
-def survival_selection(population):
-    population.sort(key=lambda tup: tup[1], reverse=True)
-    return population[:-2]
+def survival_selection(population, parents):
+    checksum = 0
+    for parent in parents:
+        for i in range(len(population)):
+            if parent == population[i][0]:
+                population.pop(i)
+                checksum += 1
+                break
+    if checksum != 2:
+        return population[:-1]
+    return population
 
 def init_population(population_size):
     population = []
@@ -90,7 +98,7 @@ def main():
         children = calculate_fitness(children)
         population_fitness.append(children[0])
         population_fitness.append(children[1])
-        population_fitness = survival_selection(population_fitness)
+        population_fitness = survival_selection(population_fitness, parents)
         solution = eval(population_fitness)
         count += 1
     print(f'Generation {count}: {solution}')
