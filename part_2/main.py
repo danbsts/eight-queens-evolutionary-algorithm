@@ -53,7 +53,7 @@ def parent_selection(population):
 def select_random_parents(population):
     random_parents = []
     for i in range(5):
-        random_parents.append(population[random.randint(0,9)])
+        random_parents.append(population[random.randint(0,99)])
     return random_parents
     
 def survival_selection(population, parents):
