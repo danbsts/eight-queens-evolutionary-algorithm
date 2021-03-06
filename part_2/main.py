@@ -1,10 +1,7 @@
 import random
-<<<<<<< HEAD
 import numpy as np
 from functools import reduce
 
-=======
->>>>>>> 00872453ed5e7a1dfb342b3a35593169594d9964
 from functools import reduce
 def calculate_fitness(population):
     result = []
